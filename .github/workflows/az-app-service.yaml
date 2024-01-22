@@ -67,5 +67,3 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
           slot-name: ${{ inputs.ENVIRONMENT }}
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
-
-

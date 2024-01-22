@@ -2,7 +2,7 @@ name: "Deploy-App-Services"
 
 on:
   workflow_call:
-    inputs:`
+    inputs:
       AZURE_WEBAPP_NAME:  # set this to your function app name on Azure
         required: true
         type: string

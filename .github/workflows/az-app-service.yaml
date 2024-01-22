@@ -44,14 +44,14 @@ jobs:
       - name: Setup DotNet ${{ inputs.DOTNET_VERSION }} Environment
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} 
+          dotnet-version: ${{ inputs.DOTNET_VERSION }} 
       
       # Run dotnet build and publish
       - name: dotnet build and publish
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+          dotnet publish -c Release --property:PublishDir='${{ inputs.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -64,6 +64,6 @@ jobs:
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
-          app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+          app-name: ${{ inputs.AZURE_WEBAPP_NAME }}
           slot-name: ${{ inputs.ENVIRONMENT }}
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+          package: '${{ inputs.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'

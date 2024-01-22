@@ -16,7 +16,11 @@ on:
         required: true
         type: string
     secrets:
-      AZURE_WEBAPP_PUBLISH_PROFILE:
+      AZUREAPPSERVICE_CLIENTID:
+        required: true
+      AZUREAPPSERVICE_TENANTID:
+        required: true
+      AZUREAPPSERVICE_SUBSCRIPTIONID:
         required: true
 
 jobs:
@@ -48,13 +52,20 @@ jobs:
           dotnet restore
           dotnet build --configuration Release
           dotnet publish -c Release --property:PublishDir='${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
           
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
         uses: azure/webapps-deploy@v2
         with: 
           app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+          slot-name: ${{ inputs.ENVIRONMENT }}
           package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
 
 

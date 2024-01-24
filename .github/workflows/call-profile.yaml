@@ -1,0 +1,18 @@
+name: deploy app service
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  call:
+    uses: ./.github/workflows/az-app-service.yaml
+    with:
+      AZURE_WEBAPP_NAME: 'TestMyFirstApp'
+      AZURE_WEBAPP_PACKAGE_PATH: '.'
+      DOTNET_VERSION: '8.x'
+      ENVIRONMENT: 'dev'
+    secrets:
+      AZUREAPPSERVICE_PUBLISHPROFILE: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+
